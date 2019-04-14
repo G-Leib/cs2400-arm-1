@@ -18,8 +18,8 @@ overflow		DCD		0b10000000000000000
 			MOV		R0, #0			;Counter initialized to 0
 			ADR		R7, bits_amt		;Find the amount of bits
 			LDR		R7, [R7]			;Load the amount of bits
-			LDMia	R6!, {R1, R2}		;Load numbers to be added into R1and R2
-			MOV		R3, #0			;Initialize sum as 0
+			LDMia	R6!, {R1, R2}		;Load numbers to be multiplied (added) into R1 and R2
+			MOV		R3, #0			;Initialize product (sum) as 0
 			MOV		R5, #1			;Use R5 as mask for 0b1
 			ADR		R8, overflow		;check for overflow
 			LDR		R8, [R8]			;Overflow mask
@@ -47,6 +47,10 @@ adder
 			Beq		sum_overflow		;Branch to sum overflow handler
 			B		increment_1
 exit
+			ADR		R1, result		;Load address of result in R1
+			ADR		R2, carry			;Load address of carry in R2
+			STR		R3, [R1]			;Store result in result fill of memory
+			STR		R10, [R2]			;Store carry in carry fill of memory
 			END
 sum_overflow
 			SUB		R3, R3, R8		;Truncate overflow bit
